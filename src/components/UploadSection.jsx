@@ -20,14 +20,26 @@ function UploadSection({ onFileUpload, onAnalyze, uploadedFile, isAnalyzing }) {
     setDragActive(false);
     
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      onFileUpload(e.dataTransfer.files[0]);
+      // Only accept video files for deepfake detection
+      const file = e.dataTransfer.files[0];
+      if (file.type.startsWith('video/')) {
+        onFileUpload(file);
+      } else {
+        alert('Please upload a video file for deepfake analysis.');
+      }
     }
   };
 
   const handleChange = (e) => {
     e.preventDefault();
     if (e.target.files && e.target.files[0]) {
-      onFileUpload(e.target.files[0]);
+      // Only accept video files for deepfake detection
+      const file = e.target.files[0];
+      if (file.type.startsWith('video/')) {
+        onFileUpload(file);
+      } else {
+        alert('Please upload a video file for deepfake analysis.');
+      }
     }
   };
 
@@ -55,7 +67,7 @@ function UploadSection({ onFileUpload, onAnalyze, uploadedFile, isAnalyzing }) {
               type="file" 
               className="hidden" 
               onChange={handleChange}
-              accept="image/*, video/*"
+              accept="video/*"  // Changed to only accept video files
             />
 
             {!uploadedFile ? (
@@ -69,14 +81,14 @@ function UploadSection({ onFileUpload, onAnalyze, uploadedFile, isAnalyzing }) {
                   <span className="font-semibold">Click to upload</span> or drag and drop
                 </p>
                 <p className="text-xs text-gray-500">
-                  Supported formats: JPG, PNG, MP4, MOV (max 50MB)
+                  Supported formats: MP4, MOV (max 50MB)
                 </p>
                 <button 
                   type="button"
                   onClick={handleClick}
                   className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
                 >
-                  Select File
+                  Select Video
                 </button>
               </div>
             ) : (
@@ -85,7 +97,7 @@ function UploadSection({ onFileUpload, onAnalyze, uploadedFile, isAnalyzing }) {
                   <svg className="h-8 w-8 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
-                  <span className="font-medium">File uploaded!</span>
+                  <span className="font-medium">Video uploaded!</span>
                 </div>
                 <p className="text-sm text-gray-600 mb-4">
                   {uploadedFile.name} ({(uploadedFile.size / (1024 * 1024)).toFixed(2)} MB)
@@ -96,7 +108,7 @@ function UploadSection({ onFileUpload, onAnalyze, uploadedFile, isAnalyzing }) {
                     onClick={handleClick}
                     className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100"
                   >
-                    Change File
+                    Change Video
                   </button>
                   <button 
                     type="button"
@@ -106,7 +118,7 @@ function UploadSection({ onFileUpload, onAnalyze, uploadedFile, isAnalyzing }) {
                       isAnalyzing ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-600"
                     }`}
                   >
-                    {isAnalyzing ? "Analyzing..." : "Analyze Now"}
+                    {isAnalyzing ? "Analyzing..." : "Detect Deepfake"}
                   </button>
                 </div>
               </div>
@@ -116,8 +128,8 @@ function UploadSection({ onFileUpload, onAnalyze, uploadedFile, isAnalyzing }) {
           {isAnalyzing && (
             <div className="mt-8 text-center">
               <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-blue-500 border-t-transparent"></div>
-              <p className="mt-4 text-lg font-medium">Analyzing your media for deepfake indicators...</p>
-              <p className="text-sm text-gray-500">This may take a few seconds</p>
+              <p className="mt-4 text-lg font-medium">Analyzing video with AI deepfake detection model...</p>
+              <p className="text-sm text-gray-500">This may take a few moments depending on video length</p>
             </div>
           )}
         </div>

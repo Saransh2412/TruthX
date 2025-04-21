@@ -7,18 +7,75 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Node and build output
+node_modules/
+dist/
+dist-ssr/
+.build/
+.cache/
+temp/
+tmp/
+
+# Local env files
+.env
+.env.*.local
 *.local
 
-# Editor directories and files
+# Dependency directories
+jspm_packages/
+
+# Large files and models
+*.h5
+*.ckpt
+*.pt
+*.pth
+*.tflite
+*.pb
+*.onnx
+*.weights
+*.bin
+*.zip
+*.tar
+*.tar.gz
+*.7z
+
+# Ignore specific large model file
+src/aiwork/best_deepfake_model.h5
+
+# Common model/output folders
+models/
+checkpoints/
+outputs/
+runs/
+
+# IDE and editor folders
 .vscode/*
 !.vscode/extensions.json
-.idea
+.idea/
 .DS_Store
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+<<<<<<< HEAD
+=======
+
+# Optional logs or crash dumps
+*.orig
+*.rej
+*.bak
+*.tmp
+*.log.[0-9]*
+core.*
+
+# Coverage
+coverage/
+*.lcov*
+>>>>>>> 46fe6df67b9d6f400acc9ad0db8fd3286de713ac

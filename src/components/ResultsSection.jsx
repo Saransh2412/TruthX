@@ -1,7 +1,21 @@
+import { useState, useEffect } from 'react';
+
 function ResultsSection({ result, file }) {
+    const [videoUrl, setVideoUrl] = useState('');
     const gaugeColor = result.isDeepfake ? 'bg-red-500' : 'bg-green-500';
-    const verdict = result.isDeepfake ? 'Likely Deepfake' : 'Likely Authentic';
+    const verdict = result.isDeepfake ? 'Deepfake Detected' : 'Authentic Video';
     const percentage = `${result.confidenceScore}%`;
+    
+    useEffect(() => {
+        // Create object URL for video display
+        if (file && file.type.startsWith('video/')) {
+            const url = URL.createObjectURL(file);
+            setVideoUrl(url);
+            
+            // Clean up URL when component unmounts
+            return () => URL.revokeObjectURL(url);
+        }
+    }, [file]);
     
     return (
       <section className="py-16 bg-white border-t border-gray-200">
@@ -12,15 +26,18 @@ function ResultsSection({ result, file }) {
             <div className="bg-gray-50 border rounded-xl p-6 md:p-8 shadow-sm">
               <div className="flex flex-col md:flex-row gap-8">
                 <div className="md:w-1/3">
-                  {file && file.type.startsWith('image/') ? (
-                    <img 
-                      src={URL.createObjectURL(file)} 
-                      alt="Analyzed media" 
-                      className="w-full h-auto rounded-lg border border-gray-300"
-                    />
+                  {file && file.type.startsWith('video/') && videoUrl ? (
+                    <div className="w-full">
+                      <video 
+                        src={videoUrl} 
+                        controls
+                        className="w-full h-auto rounded-lg border border-gray-300"
+                      />
+                      <p className="text-xs text-gray-500 mt-2 text-center">{file.name}</p>
+                    </div>
                   ) : (
                     <div className="bg-gray-200 w-full h-48 rounded-lg flex items-center justify-center">
-                      <span className="text-gray-500">Media Preview</span>
+                      <span className="text-gray-500">Video Preview</span>
                     </div>
                   )}
                 </div>
@@ -28,13 +45,17 @@ function ResultsSection({ result, file }) {
                 <div className="md:w-2/3">
                   <div className="flex items-center mb-6">
                     <div className={`rounded-full w-4 h-4 ${gaugeColor} mr-3`}></div>
-                    <h3 className="text-2xl font-bold">{verdict}</h3>
+                    <h3 className={`text-2xl font-bold ${result.isDeepfake ? 'text-red-600' : 'text-green-600'}`}>
+                      {verdict}
+                    </h3>
                   </div>
                   
                   <div className="mb-6">
                     <div className="flex justify-between mb-1">
-                      <span className="text-sm font-medium">Confidence Score</span>
-                      <span className="text-sm font-medium">{percentage}</span>
+                      <span className="text-sm font-medium">AI Confidence Score</span>
+                      <span className={`text-sm font-medium ${result.isDeepfake ? 'text-red-600' : 'text-green-600'}`}>
+                        {percentage}
+                      </span>
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-2.5">
                       <div 
@@ -42,30 +63,46 @@ function ResultsSection({ result, file }) {
                         style={{ width: percentage }}
                       ></div>
                     </div>
+                    <p className="text-xs text-gray-500 mt-1">
+                      {result.confidenceScore >= 90 ? 'High confidence' : 
+                       result.confidenceScore >= 70 ? 'Medium confidence' : 'Low confidence'}
+                    </p>
                   </div>
                   
                   <div className="space-y-4">
-                    <div>
-                      <h4 className="font-medium mb-2">Detected Manipulation</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {result.manipulationRegions.map((region, index) => (
-                          <span 
-                            key={index} 
-                            className="bg-gray-200 px-3 py-1 rounded-full text-sm capitalize"
-                          >
-                            {region}
-                          </span>
-                        ))}
+                    {result.isDeepfake && result.manipulationRegions.length > 0 && (
+                      <div>
+                        <h4 className="font-medium mb-2">Detected Manipulation</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {result.manipulationRegions.map((region, index) => (
+                            <span 
+                              key={index} 
+                              className="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm capitalize"
+                            >
+                              {region}
+                            </span>
+                          ))}
+                        </div>
                       </div>
-                    </div>
+                    )}
                     
                     <div>
                       <h4 className="font-medium mb-2">Analysis Details</h4>
                       <ul className="space-y-1 text-sm text-gray-600">
-                        <li>• Analysis time: {result.analysisTime} seconds</li>
-                        <li>• File type: {file.type}</li>
+                        <li>• Processing time: {result.analysisTime} seconds</li>
+                        <li>• Video format: {file.type.split('/')[1].toUpperCase()}</li>
                         <li>• File size: {(file.size / (1024 * 1024)).toFixed(2)} MB</li>
+                        <li>• Analysis method: EfficientNet Deep Learning Model</li>
                       </ul>
+                    </div>
+                    
+                    <div className="bg-gray-100 p-4 rounded-lg mt-4">
+                      <h4 className="font-medium mb-2">Result Interpretation</h4>
+                      <p className="text-sm text-gray-700">
+                        {result.isDeepfake 
+                          ? 'This video shows signs of AI manipulation. Our model has detected potential deepfake indicators in the content. Exercise caution when sharing this material.'
+                          : 'This video appears to be authentic according to our detection model. No significant signs of AI manipulation were detected.'}
+                      </p>
                     </div>
                   </div>
                   
@@ -75,7 +112,7 @@ function ResultsSection({ result, file }) {
                         Download Report
                       </button>
                       <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
-                        Share Results
+                        Analyze Another Video
                       </button>
                     </div>
                   </div>
@@ -86,6 +123,6 @@ function ResultsSection({ result, file }) {
         </div>
       </section>
     );
-  }
+}
   
-  export default ResultsSection;
+export default ResultsSection;
