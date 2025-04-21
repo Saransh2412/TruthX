@@ -20,19 +20,17 @@ function App() {
 
   const handleAnalyze = () => {
     if (!uploadedFile) return;
-    
+
     setIsAnalyzing(true);
-    
-    // Simulate API call for deepfake detection
+
     setTimeout(() => {
-      // Mock result - in production, this would come from your backend
       const result = {
         isDeepfake: Math.random() > 0.5,
-        confidenceScore: Math.floor(Math.random() * 40) + 60, // 60-99%
+        confidenceScore: Math.floor(Math.random() * 40) + 60,
         manipulationRegions: Math.random() > 0.5 ? ['face', 'eyes'] : ['mouth', 'voice'],
-        analysisTime: (Math.random() * 2 + 1).toFixed(1), // 1-3 seconds
+        analysisTime: (Math.random() * 2 + 1).toFixed(1),
       };
-      
+
       setAnalysisResult(result);
       setIsAnalyzing(false);
     }, 3000);
