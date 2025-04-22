@@ -5,12 +5,12 @@ import Header from './components/Header';
 import Hero from './components/Hero';
 import UploadSection from './components/UploadSection';
 import ResultsSection from './components/ResultsSection';
-import HowItWorks from './components/HowItWorks';
 import Footer from './components/Footer';
 import Help from './pages/Help';
 import Articles from './pages/Articles';
 import About from './pages/AboutUs';
 import Model from './pages/Model';
+import TruthXTechnologies from './components/TruthX-technologies';
 // API endpoint for the Flask backend
 const API_URL = 'http://localhost:5000/api/analyze';
 
@@ -89,7 +89,7 @@ function App() {
                 {analysisResult && (
                   <ResultsSection result={analysisResult} file={uploadedFile} />
                 )}
-                <HowItWorks />
+                <TruthXTechnologies />
               </main>
             </div>
           } />

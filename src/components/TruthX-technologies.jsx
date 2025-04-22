@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-function HowItWorks() {
+function TruthXTechnologies() {
     const steps = [
       {
         title: "Advanced AI Analysis",
@@ -171,4 +171,4 @@ function HowItWorks() {
     );
   }
   
-  export default HowItWorks;
+  export default TruthXTechnologies;
