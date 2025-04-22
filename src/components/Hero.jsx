@@ -1,4 +1,6 @@
 // src/components/Hero.jsx
+import { Link } from "react-router-dom";
+
 function Hero() {
     return (
       <section className="bg-gradient-to-r from-blue-900 to-purple-900 text-white py-16">
@@ -12,9 +14,9 @@ function Hero() {
             <a href="#upload" className="bg-blue-500 hover:bg-blue-400 text-white px-6 py-3 rounded-lg font-medium">
               Analyze Media Now
             </a>
-            <a href="#how-it-works" className="border border-white hover:bg-white hover:text-blue-900 px-6 py-3 rounded-lg font-medium">
-              Learn How It Works
-            </a>
+            <Link to="/model" className="border border-white hover:bg-white hover:text-blue-900 px-6 py-3 rounded-lg font-medium">
+  Learn How It Works
+</Link>
           </div>
         </div>
       </section>
