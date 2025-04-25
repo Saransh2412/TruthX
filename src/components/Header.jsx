@@ -1,4 +1,3 @@
-// src/components/Header.jsx
 import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/clerk-react';
 import { Link } from 'react-router-dom';
 

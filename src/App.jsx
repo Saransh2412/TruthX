@@ -11,6 +11,7 @@ import Articles from './pages/Articles';
 import About from './pages/AboutUs';
 import Model from './pages/Model';
 import TruthXTechnologies from './components/TruthX-technologies';
+
 // API endpoint for the Flask backend
 const API_URL = 'http://localhost:5000/api/analyze';
 
@@ -34,11 +35,9 @@ function App() {
     setError(null);
 
     try {
-      // Create form data to send the video file
       const formData = new FormData();
       formData.append('file', uploadedFile);
 
-      // Send the video to the Flask API
       const response = await fetch(API_URL, {
         method: 'POST',
         body: formData,
@@ -48,11 +47,7 @@ function App() {
         throw new Error(`Server error: ${response.status}`);
       }
 
-      // Parse the response from the model
       const result = await response.json();
-      
-      // Format the result to match your frontend expectations
-      // The Python model returns result with isDeepfake, confidenceScore, etc.
       setAnalysisResult(result);
     } catch (err) {
       console.error('Analysis error:', err);
